@@ -48,7 +48,7 @@ def format_message(msg_type, sender_id, receiver_id, message):
 # Mensagem periódica para manter a conexão ativa
 def periodic_message(server_socket):
     while True:
-        time.sleep(60)
+        time.sleep(20)
         with lock:
             message = f"Server is Active, {len(clients)} clients connected. Time since start: {int(time.time())} seconds"
 
@@ -63,12 +63,15 @@ def handle_client(client_socket, client_address):
 
             if not message:
                 break
+
+            # Exibe a mensagem recebida no servidor
+            print(f"Server: Message received from {client_address}: {message.decode('utf-8')}")
         except:
             # Tratando possíveis falhas na comunicação
-            print(f'Erro ao receber mensagem do cliente {client_address}')
+            print(f'Error while receiving message from {client_address}')
             break
 
-def handle_message(message, client_address):
+def handle_message(message, client_address, server_socket):
     msg_type, sender_id, receiver_id, text_size = parse_message(message)
 
     # OI
